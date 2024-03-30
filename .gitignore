@@ -1,0 +1,12 @@
+# 一般的なgitignore
+/vendor/
+/node_modules/
+*.log
+.cache
+.DS_Store
+src/.temp
+node_modules
+dist
+.env
+.env.*
+# End Generation Here
