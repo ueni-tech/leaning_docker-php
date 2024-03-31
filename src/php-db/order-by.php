@@ -5,7 +5,20 @@
 
   try {
     $pdo = new PDO($dsn, $user, $password);
-    $sql = 'SELECT * FROM users';
+
+    if(isset($_GET['order'])){
+      $order = $_GET['order'];
+    } else {
+      $order = NULL;
+    }
+
+    if($order === 'asc'){
+      $sql = 'SELECT id, name, age FROM users ORDER BY age ASC';
+    } elseif($order === 'desc'){
+      $sql = 'SELECT id, name, age FROM users ORDER BY age DESC';
+    } else {
+      $sql = 'SELECT id, name, age FROM users ORDER BY id';
+    }
 
     $stmt = $pdo->query($sql);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -23,16 +36,15 @@
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <table class="all-column">
+  <div class="sort">
+    <a href="order-by.php?order=asc" class="sort-btn">年齢順（昇順）</a>
+    <a href="order-by.php?order=desc" class="sort-btn">年齢順（降順）</a>
+  </div>
+  <table>
     <tr>
       <th>ID</th>
       <th>氏名</th>
-      <th>ふりがな</th>
-      <th>メールアドレス</th>
       <th>年齢</th>
-      <th>住所</th>
-      <th>編集</th>
-      <th>削除</th>
     </tr>
     <?php
     foreach($results as $result) {
@@ -40,12 +52,7 @@
       <tr>
       <td>{$result['id']}</td>
       <td>{$result['name']}</td>
-      <td>{$result['furigana']}</td>
-      <td>{$result['email']}</td>
       <td>{$result['age']}</td>
-      <td>{$result['address']}</td>
-      <td><a href='update.php?id={$result['id']}'>編集</a></td>
-      <td><a href='delete.php?id={$result['id']}'>削除</a></td>
       </tr>
       ";
       echo $table_row;
