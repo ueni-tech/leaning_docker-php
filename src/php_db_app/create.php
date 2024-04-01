@@ -7,11 +7,11 @@ if (isset($_POST['submit'])) {
   try {
     $pdo = new PDO($dsn, $user, $password);
 
-    $sql = '
+    $sql_insert = '
     INSERT INTO products(product_code, product_name, price, stock_quantity, vendor_code)
     VALUES(:product_code, :product_name, :price, :stock_quantity, :vendor_code)
     ';
-    $stmt_insert = $pdo->prepare($sql);
+    $stmt_insert = $pdo->prepare($sql_insert);
     $stmt_insert->bindValue(':product_code', $_POST['product_code'], PDO::PARAM_INT);
     $stmt_insert->bindValue(':product_name', $_POST['product_name'], PDO::PARAM_STR);
     $stmt_insert->bindValue(':price', $_POST['price'], PDO::PARAM_INT);
@@ -19,7 +19,10 @@ if (isset($_POST['submit'])) {
     $stmt_insert->bindValue(':vendor_code', $_POST['vendor_code'], PDO::PARAM_INT);
     $stmt_insert->execute();
 
-    header('Location: read.php');
+    $count = $stmt_insert->rowCount();
+    $message = "商品を{$count}件登録しました。";
+
+    header("Location: read.php?message={$message}");
   } catch (PDOException $e) {
     exit($e->getMessage());
   }

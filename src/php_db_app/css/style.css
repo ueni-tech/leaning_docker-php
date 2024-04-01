@@ -176,6 +176,10 @@ footer {
   text-align: center;
 }
 
+.success {
+  color: #28a745;
+}
+
 /* create.php */
 .registration {
   box-sizing: border-box;
